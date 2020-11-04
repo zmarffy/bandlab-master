@@ -81,6 +81,7 @@ def click_element_to_download(elem, download_dir_name):
     finally:
         os.chdir(old_cwd)
 
+
 # TODO: Delete master from BandLab once done. Make this a pip package.
 try:
     driver = webdriver.Chrome(options=options)
