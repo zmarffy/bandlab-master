@@ -110,4 +110,7 @@ try:
 finally:
     if driver is not None:
         driver.quit()
-    shutil.rmtree(download_dir_name)
+    try:
+        shutil.rmtree(download_dir_name)
+    except FileNotFoundError:
+        pass
