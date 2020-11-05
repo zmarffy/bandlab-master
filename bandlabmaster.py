@@ -3,12 +3,12 @@
 import os
 import shutil
 import sys
-import uuid
 from os.path import abspath
 from time import sleep
 
 import selenium
-from selenium import webdriver
+from webdriver_extended import ChromeExtended as Chrome
+from webdriver_extended import WebElementExtended as WebElement
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
@@ -21,12 +21,8 @@ if len(sys.argv) < 2:
 if not os.path.isfile(sys.argv[1]):
     raise FileNotFoundError(f"File {sys.argv[1]} does not exist")
 
-download_dir_name = f".download-{uuid.uuid4()}"
-
 options = Options()
 options.headless = True
-options.add_experimental_option(
-    "prefs", {"download.default_directory": download_dir_name})
 options.add_argument("--window-size=1920,1080")
 
 driver = None
@@ -51,41 +47,9 @@ def wait_until_master_ready(driver, username):
                     driver.get(driver.current_url)
 
 
-def click_element_to_download(elem, download_dir_name):
-    old_cwd = os.getcwd()
-    os.chdir(download_dir_name)
-    try:
-        elem.click()
-        download_started = False
-        while True:
-            # Wait for download to start
-            download_started_check_num = 0
-            while not download_started:
-                download_started_check_num += 1
-                try:
-                    if os.listdir():
-                        download_started = True
-                    else:
-                        raise FileNotFoundError("Download never started")
-                except FileNotFoundError as e:
-                    if download_started_check_num == 30:
-                        raise e
-                    else:
-                        sleep(3)
-            # If the download finished
-            if not [f for f in os.listdir() if f.endswith(".crdownload")]:
-                file_name = os.listdir()[0]
-                break
-            sleep(1)
-        shutil.move(file_name, os.path.join(old_cwd, file_name))
-    finally:
-        os.chdir(old_cwd)
-
-
 # TODO: Delete master from BandLab once done. Make this a pip package.
 try:
-    driver = webdriver.Chrome(options=options)
-    os.mkdir(download_dir_name)
+    driver = Chrome(options=options)
     driver.get("https://bandlab.com/login")
     log_in_button = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, "button[type='submit']")))
@@ -106,12 +70,8 @@ try:
     mastered_tab_button = WebDriverWait(driver, 3).until(EC.presence_of_element_located(
         (By.CSS_SELECTOR, "label[for='versionMastered']"))).click()
     driver.find_elements_by_css_selector("div.label")[-1].click()
-    run_with_loading(click_element_to_download, phrase="Downloading master", args=[
-                     driver.find_element_by_css_selector(".form-field-submit button[type='submit']"), download_dir_name])
+    run_with_loading(WebElement.click_to_download, phrase="Downloading master", args=[
+                     driver.find_element_by_css_selector(".form-field-submit button[type='submit']")], kwargs={"max_download_started_check_num": 40})
 finally:
     if driver is not None:
         driver.quit()
-    try:
-        shutil.rmtree(download_dir_name)
-    except FileNotFoundError:
-        pass

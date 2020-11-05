@@ -7,6 +7,7 @@
 * `chromium`
 * `chromedriver`
 * `selenium` (a `pip` package)
+* `webdriver-extended` (a `pip` package)
 * `zmtools` (a `pip` package)
 
 ## Usage
