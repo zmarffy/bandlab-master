@@ -7,8 +7,8 @@ from os.path import abspath
 from time import sleep
 
 import selenium
-from webdriver_extended import ChromeExtended as Chrome
-from webdriver_extended import WebElementExtended as WebElement
+from webdriver_extended import Chrome
+from webdriver_extended.chrome.webelement import WebElement
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
