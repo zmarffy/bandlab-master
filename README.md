@@ -10,6 +10,8 @@
 * `webdriver-extended` (a `pip` package)
 * `zmtools` (a `pip` package)
 
+**Note:** It is unknown how well this works if installed via the DEB file due to dependencies. I think you may need to use the non-snap version of Chromium. This will be addressed in the future.
+
 ## Usage
 
 `bandlab-master [file_to_master]`

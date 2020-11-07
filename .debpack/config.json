@@ -5,7 +5,6 @@
 		"name" : "Zeke Marffy",
 		"email" : "zmarffy@yahoo.com"
 	},
-	"architecture_all" : true,
 	"depends": [
 		"python3",
 		"chromium-browser",
@@ -14,7 +13,8 @@
 	"description" : "master a song with BandLab",
 	"build" : {
 		"files" : {
-			"bandlabmaster.py" : "/usr/bin/bandlab-master"
+			"bandlab_master/__main__.py" : "/usr/bin/bandlab-master"
 		}
-	}
+	},
+	"architecture_all" : true
 }
