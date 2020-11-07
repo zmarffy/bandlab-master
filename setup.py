@@ -20,7 +20,7 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     install_requires=[
         'selenium',
-        'zmtools'
+        'zmtools>=1.4.0'
     ],
     entry_points={
         'console_scripts': [
