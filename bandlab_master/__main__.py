@@ -1,5 +1,6 @@
 #! /usr/bin/env python3
 
+import argparse
 import os
 import sys
 from time import sleep
@@ -37,11 +38,13 @@ def wait_until_master_ready(driver, username):
 
 def main():
 
-    if len(sys.argv) < 2:
-        raise ValueError("No file supplied")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("file", help="file to master")
+    args = parser.parse_args()
+    file_to_master = args.file
 
-    if not os.path.isfile(sys.argv[1]):
-        raise FileNotFoundError(f"File {sys.argv[1]} does not exist")
+    if not os.path.isfile(file_to_master):
+        raise FileNotFoundError(f"File {file_to_master} does not exist")
 
     options = Options()
     options.headless = True
@@ -64,7 +67,7 @@ def main():
         driver.get("https://www.bandlab.com/upload")
         file_upload_form = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "input[type='file']")))
-        file_upload_form.send_keys(os.path.abspath(sys.argv[1]))
+        file_upload_form.send_keys(os.path.abspath(file_to_master))
         WebDriverWait(driver, 20).until(EC.presence_of_element_located(
             (By.CSS_SELECTOR, "button[type='submit'].scs"))).click()
         run_with_loading(wait_until_master_ready,
