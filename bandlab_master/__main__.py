@@ -78,11 +78,11 @@ def main():
                 ".form-field-submit button[type='submit']").click_to_download(max_download_started_check_num=40)
         with loading_animation(phrase="Deleting project"):
             driver.find_element_by_css_selector(
-                "button[type='button']").click()
+                "button[type='button']").bruteforce_click()
             WebDriverWait(driver, 2).until(EC.element_to_be_clickable(
-                (By.CSS_SELECTOR, "a span.text-cta"))).click()
+                (By.CSS_SELECTOR, "a span.text-cta"))).bruteforce_click()
             WebDriverWait(driver, 2).until(EC.element_to_be_clickable(
-                (By.CSS_SELECTOR, "button.modal-confirm"))).click()
+                (By.CSS_SELECTOR, "button.modal-confirm"))).bruteforce_click()
             sleep(1)
     finally:
         if driver is not None:
