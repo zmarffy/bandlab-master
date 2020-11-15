@@ -13,11 +13,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_extended import Chrome
 from zmtools import loading_animation
 
-with open(os.path.join(os.path.expanduser("~"), ".bandlab", ".creds")) as f:
-    username, password = f.read().strip().split()
+creds_file_location = os.path.join(
+    os.path.expanduser("~"), ".bandlab", ".creds")
 
-
-# TODO: Dynamically get wait times based on file size.
+try:
+    with open(creds_file_location) as f:
+        username, password = f.read().strip().split()
+except FileNotFoundError:
+    raise FileNotFoundError(
+        f"Need to create a file in {creds_file_location} with your BandLab username and password on each line")
 
 
 def main():
@@ -29,6 +33,9 @@ def main():
 
     if not os.path.isfile(file_to_master):
         raise FileNotFoundError(f"File {file_to_master} does not exist")
+
+    file_size = os.stat(file_to_master).st_size
+    total_master_attempts = 30 + int(file_size / 10000000) * 8
 
     options = Options()
     options.headless = True
@@ -49,6 +56,8 @@ def main():
             log_in_button.click()
             # Possibly change this sleep to a more specific wait
             sleep(4)
+        if "accounts.bandlab.com" in driver.current_url:
+            raise ValueError("Incorrect BandLab creds")
         with loading_animation(phrase="Uploading"):
             driver.get("https://www.bandlab.com/upload")
             file_upload_form = WebDriverWait(driver, 10).until(
@@ -65,7 +74,7 @@ def main():
                         (By.CSS_SELECTOR, ".button-social[ng-controller='RevisionDownloadCtrl']"))).click()
                     break
                 except selenium.common.exceptions.TimeoutException as e:
-                    if attempt_num == 30:
+                    if attempt_num == total_master_attempts:
                         raise e
                     else:
                         if driver.current_url.startswith(f"https://www.bandlab.com/{username}"):
