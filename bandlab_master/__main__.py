@@ -34,6 +34,7 @@ def main():
     if not os.path.isfile(file_to_master):
         raise FileNotFoundError(f"File {file_to_master} does not exist")
 
+    # Dynamically determine wait time
     file_size = os.stat(file_to_master).st_size
     total_master_attempts = 30 + int(file_size / 10000000) * 8
 
@@ -54,7 +55,6 @@ def main():
             driver.find_element_by_css_selector(
                 "input[name='password']").send_keys(password)
             log_in_button.click()
-            # Possibly change this sleep to a more specific wait
             sleep(4)
         if "accounts.bandlab.com" in driver.current_url:
             raise ValueError("Incorrect BandLab creds")
@@ -94,6 +94,7 @@ def main():
                 (By.CSS_SELECTOR, "button.modal-confirm"))).bruteforce_click()
             sleep(1)
     finally:
+        # Possibly make a context manager for the browser at some point
         if driver is not None:
             driver.quit()
     return 0
