@@ -17,3 +17,7 @@
 `bandlab-master [file_to_master]`
 
 Make sure your BandLab credentials are in `~/.bandlab/.creds`, username on first line and password on second.
+
+## Note
+
+Please bear with me as I am only recently learning packaging, and managing a Debian one AND a pip one is not the easiest thing. There may be some revoked releases.
