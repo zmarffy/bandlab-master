@@ -1,9 +1,9 @@
+import os
 import re
-from os.path import join as join_path
 
 import setuptools
 
-with open(join_path("bandlab_master", "__init__.py"), encoding="utf8") as f:
+with open(os.path.join("bandlab_master", "__init__.py"), encoding="utf8") as f:
     version = re.search(r'__version__ = "(.*?)"', f.read()).group(1)
 
 setuptools.setup(
