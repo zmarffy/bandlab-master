@@ -21,7 +21,6 @@ setuptools.setup(
     install_requires=[
         'selenium',
         'webdriver-extended>=1.1',
-        'zmtools>=1.4.0'
     ],
     entry_points={
         'console_scripts': [
