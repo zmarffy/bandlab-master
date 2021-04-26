@@ -2,7 +2,7 @@
 
 `bandlab-master` is a Python script that uploads a song to your [BandLab](https://www.bandlab.com/) account, masters it with default settings, and downloads it as WAV. Eventually, I will update this to delete the temporary project once its master downloads.
 
-`balndlab-master` uses my amazingly clever (and probably terrible) [`webdriver-extended`](https://github.com/zmarffy/webdriver-extended).
+`bandlab-master` uses my amazingly clever (and probably terrible) [`webdriver-extended`](https://github.com/zmarffy/webdriver-extended). Yes, it needs docs.
 
 ## Requirements
 
